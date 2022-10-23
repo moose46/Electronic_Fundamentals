@@ -17,7 +17,6 @@ class Resistor:
         """
         Parameters:
             ohms[int | float]: Value of the resistor in ohms
-            symbol(string): Name of the resistor
 
         Examples:
         >>> r1 = Resistor(ohms=100)
@@ -173,10 +172,10 @@ class Series:
         self._volts = value
 
     def __repr__(self):
-
         return f"rt={self.rt} \u03A9" \
                f"\nvolts({self._volts})={self.voltage_drops}" \
                f"\nit={self.it}"
+
 
 class Parallel:
     """Class will calculate current, total ohms for parallel resistors"""
