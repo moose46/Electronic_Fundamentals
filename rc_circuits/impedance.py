@@ -38,6 +38,14 @@ class ImpedanceTriangle:
         (self._filename, self._line_number, self._function_name, text) = traceback.extract_stack()[-2]
         self._def_name = text[:text.find('=')].strip()
         self._z = 0.0
+        self._vr = 0.0  # voltage drop across the resistor
+        self._vc = 0.0  # voltage drop across the capacitor
+        self._vs = 0.0  # voltage source
+
+    @property
+    # source voltage
+    def vs(self):
+        return self._vs
 
     @property
     def frequency(self):
@@ -65,12 +73,31 @@ class ImpedanceTriangle:
         self._current = value
 
     @property
+    def vr(self):
+        return self._vr
+
+    @vr.setter
+    # set the voltage drop across the resistor
+    def vr(self, value):
+        self._vr = value
+
+    @property
+    def vc(self):
+        return self._vc
+
+    @vc.setter
+    def vc(self, value):
+        self._vc = value
+
+    @property
     def volts(self):
         return self._volts
 
     @volts.setter
     def volts(self, value: [int | float]) -> float:
         self._volts = value
+        if self._resistor != 0 and self._xc != 0:
+            self._vr = math.sqrt(self._resistor ** 2 + self.xc ** 2)
 
     @property
     def farads(self):
@@ -107,6 +134,9 @@ class ImpedanceTriangle:
         else:
             print(f"\t*** Volts {self._volts:2.2e} or Z {self.z:2.2e} not set ***")
 
+        if self._vr != 0 and self._vc != 0:
+            self._vs = math.sqrt(self._vr ** 2 + self._vc ** 2)
+
     def __repr__(self):
         return f'- {self._def_name:20}:' \
                f'\n\txc = {self._xc:8.2e} {MU_SYMBOL}F={self._farads:8.2e} f={self._frequency:,.2e}' \
@@ -115,6 +145,7 @@ class ImpedanceTriangle:
                f'\n\tR = {self._resistor:8.2e}' \
                f'\n\tV = {self._volts:.2f}' \
                f'\n\tI = {self._current:4.2e}' \
+               f'\n\tVs = {self._vs:4.2e}' \
                f'  '
 
 
@@ -132,6 +163,13 @@ print(example_10_2)
 example_10_3 = ImpedanceTriangle(resistor=2.2e3)
 example_10_3.farads = .022e-6
 example_10_3.frequency = 1.5e3
-# example_10_3.volts = 10
+example_10_3.volts = 10
 example_10_3.calculate_all()
 print(example_10_3)
+
+# Example 10-4, determine source voltage and the phase angle of fig, 10-4
+example_10_4 = ImpedanceTriangle()
+example_10_4.vr = 10
+example_10_4.vc = 15
+example_10_4.calculate_all()
+print(example_10_4)
