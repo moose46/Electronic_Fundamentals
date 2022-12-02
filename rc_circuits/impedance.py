@@ -173,3 +173,5 @@ example_10_4.vr = 10
 example_10_4.vc = 15
 example_10_4.calculate_all()
 print(example_10_4)
+example_10_4.calculate_volts()
+print(example_10_4)
