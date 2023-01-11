@@ -2,9 +2,7 @@
 import math
 import traceback
 
-DEGREE_SYMBOL = "\u00B0"
-MU_SYMBOL = "\u03BC"
-THETA_SYMBOL = "\u03B8"
+from my_symbols import *
 
 
 class ImpedanceTriangle:
